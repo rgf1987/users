@@ -39,7 +39,9 @@ class BoxUsersControllerTest {
     void findAllBoxUsers() throws Exception {
         String URL = BASE_PATH+"/findAllBoxUsers";
         //when
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(URL)).andReturn();
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(URL))
+                .andExpect(status().isOk())
+                .andReturn();
         //then
         List<ResponseBoxUserDto> returnedBoxUsers =
                 mapper.readValue(
@@ -48,7 +50,7 @@ class BoxUsersControllerTest {
 
         assertNotNull(returnedBoxUsers);
         assertTrue(returnedBoxUsers.size()>0);
-        assertEquals(200, mvcResult.getResponse().getStatus());
+
     }
 
     @Test
@@ -57,16 +59,13 @@ class BoxUsersControllerTest {
         //when
         MvcResult mvcResult = mockMvc.perform(
                 MockMvcRequestBuilders.get(URL).param("boxUserId", "1"))
+                .andExpect(status().isOk())
                 .andReturn();
         //then
         String json = mvcResult.getResponse().getContentAsString();
         ResponseBoxUserDto responseBoxUserDto = new ObjectMapper().readValue(json, ResponseBoxUserDto.class);
         assertNotNull(responseBoxUserDto);
         assertEquals(1, responseBoxUserDto.getId());
-        assertEquals(200, mvcResult.getResponse().getStatus());
-
-
-
     }
 
     @Test
@@ -84,14 +83,12 @@ class BoxUsersControllerTest {
         //when
         MvcResult mvcResult = mockMvc.perform(post(URL).contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content(requestJson))
-                        .andExpect(status().isOk())
+                        .andExpect(status().isCreated())
                         .andReturn();
         //then
         String json = mvcResult.getResponse().getContentAsString();
         ResponseBoxUserDto saveUserDto = new ObjectMapper().readValue(json, ResponseBoxUserDto.class);
         assertNotNull(saveUserDto);
         assertNotNull(saveUserDto.getId());
-        assertEquals(200, mvcResult.getResponse().getStatus());
-
     }
 }
