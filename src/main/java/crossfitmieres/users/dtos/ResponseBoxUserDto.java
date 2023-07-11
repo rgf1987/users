@@ -12,15 +12,15 @@ import java.util.Date;
 @NoArgsConstructor
 @Data
 @Builder
-public class BoxUserDto {
+public class ResponseBoxUserDto {
     private Long id;
     private String name;
     private String lastName;
     private Date registerDate;
     private Date unregisterDate;
 
-    public static BoxUserDto ofEntity(BoxUser entity) {
-        return BoxUserDto.builder()
+    public static ResponseBoxUserDto ofEntity(BoxUser entity) {
+        return ResponseBoxUserDto.builder()
                 .id(entity.getId())
                 .name(entity.getName())
                 .lastName(entity.getLastName())

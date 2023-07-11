@@ -1,7 +1,9 @@
 package crossfitmieres.users.models;
 
 
+import crossfitmieres.users.dtos.RequestBoxUserDto;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -26,9 +28,17 @@ public class BoxUser {
     private String name;
     @Column(name = "LAST_NAME", nullable = false)
     private String lastName;
-    @Column(name = "REGISTER_DATE", nullable = false)
+    @Column(name = "REGISTER_DATE", nullable = false, updatable = false)
+    @CreationTimestamp
     private Date registerDate;
     @Column(name = "UNREGISTER_DATE")
     private Date unregisterDate;
+
+    public static BoxUser ofDto(RequestBoxUserDto dto) {
+        return BoxUser.builder()
+                .name(dto.getName())
+                .lastName(dto.getLastName())
+                .build();
+    }
 
 }
