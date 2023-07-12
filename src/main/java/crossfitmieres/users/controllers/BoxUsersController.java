@@ -31,4 +31,10 @@ public class BoxUsersController {
     public ResponseEntity<ResponseBoxUserDto> saveBoxUser(@RequestBody RequestBoxUserDto requestBoxUserDto) {
         return new ResponseEntity<ResponseBoxUserDto>(boxUsersService.saveBoxUser(requestBoxUserDto), HttpStatus.CREATED);
     }
+
+    @DeleteMapping("/deleteBoxUser")
+    public ResponseEntity<?> deleteBoxUser(@RequestParam(name="boxUserId") Long boxUserId) {
+        boxUsersService.deleteBoxUser(boxUserId);
+        return ResponseEntity.noContent().build();
+    }
 }

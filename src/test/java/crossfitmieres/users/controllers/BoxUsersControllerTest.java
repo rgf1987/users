@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -90,5 +91,17 @@ class BoxUsersControllerTest {
         ResponseBoxUserDto saveUserDto = new ObjectMapper().readValue(json, ResponseBoxUserDto.class);
         assertNotNull(saveUserDto);
         assertNotNull(saveUserDto.getId());
+    }
+
+    @Test
+    void deleteBoxUserById() throws Exception {
+        //given
+        String URL = BASE_PATH+"/deleteBoxUser";
+        //when
+       mockMvc.perform(
+                        MockMvcRequestBuilders.delete(URL).param("boxUserId", "1"))
+                .andExpect(status().isNoContent());
+       
+
     }
 }

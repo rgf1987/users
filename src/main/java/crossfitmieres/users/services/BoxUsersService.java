@@ -33,4 +33,7 @@ public class BoxUsersService {
     }
 
 
+    public void deleteBoxUser(Long boxUserId) {
+        this.userRepository.deleteById(boxUserId);
+    }
 }
