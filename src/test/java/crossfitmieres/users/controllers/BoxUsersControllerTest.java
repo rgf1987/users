@@ -101,7 +101,7 @@ class BoxUsersControllerTest {
        mockMvc.perform(
                         MockMvcRequestBuilders.delete(URL).param("boxUserId", "1"))
                 .andExpect(status().isNoContent());
-       
+
 
     }
 }
