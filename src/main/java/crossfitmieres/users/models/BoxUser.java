@@ -2,10 +2,11 @@ package crossfitmieres.users.models;
 
 
 import crossfitmieres.users.dtos.RequestBoxUserDto;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.*;
+
 import java.util.Date;
 
 

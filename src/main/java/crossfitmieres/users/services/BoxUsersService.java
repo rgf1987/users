@@ -4,10 +4,10 @@ import crossfitmieres.users.dtos.RequestBoxUserDto;
 import crossfitmieres.users.dtos.ResponseBoxUserDto;
 import crossfitmieres.users.models.BoxUser;
 import crossfitmieres.users.repositories.BoxUsersRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
