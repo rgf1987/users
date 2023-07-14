@@ -38,7 +38,7 @@ public class BoxUsersController {
     @Operation(summary = "Get box users", description = "Get user by id", operationId = "findBoxUserById")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "ok, successful operation",
-                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ResponseBoxUserDto.class)))),
+                    content = @Content(schema = @Schema(implementation = ResponseBoxUserDto.class))),
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
     })
     @GetMapping("/findBoxUserById")
@@ -46,11 +46,23 @@ public class BoxUsersController {
         return new ResponseEntity<ResponseBoxUserDto>(boxUsersService.findBoxUserById(boxUserId), HttpStatus.OK);
     }
 
+    @Operation(summary = "Save new box user", description = "Insert a new box user", operationId = "saveBoxUser")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "ok, successful created",
+                    content = @Content(schema = @Schema(implementation = ResponseBoxUserDto.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
+    })
     @PostMapping("/saveBoxUser")
     public ResponseEntity<ResponseBoxUserDto> saveBoxUser(@RequestBody RequestBoxUserDto requestBoxUserDto) {
         return new ResponseEntity<ResponseBoxUserDto>(boxUsersService.saveBoxUser(requestBoxUserDto), HttpStatus.CREATED);
     }
 
+    @Operation(summary = "Delete box user", description = "Delete a box user ", operationId = "deleteBoxUser")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "ok, successful deleted",
+                    content = @Content(schema = @Schema(implementation = ResponseBoxUserDto.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
+    })
     @DeleteMapping("/deleteBoxUser")
     public ResponseEntity<?> deleteBoxUser(@RequestParam(name="boxUserId") Long boxUserId) {
         boxUsersService.deleteBoxUser(boxUserId);
