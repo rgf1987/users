@@ -1,4 +1,4 @@
-package crossfitmieres.users.exceptions;
+package crossfitmieres.usuarios.exceptions;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

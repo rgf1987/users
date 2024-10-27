@@ -1,11 +1,13 @@
 package crossfitmieres.users.controllers;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import crossfitmieres.users.dtos.RequestBoxUserDto;
-import crossfitmieres.users.dtos.ResponseBoxUserDto;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -15,16 +17,17 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import javax.persistence.EntityNotFoundException;
-import java.util.List;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import crossfitmieres.usuarios.dtos.request.RequestUsuarioBoxDto;
+import crossfitmieres.usuarios.dtos.response.ResponseUsuarioBoxDto;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class BoxUsersControllerTest {
+class UsuarioBoxControllerTest {
 
     private static final String BASE_PATH = "/api/boxUsers";
 
@@ -32,22 +35,24 @@ class BoxUsersControllerTest {
     private ObjectMapper mapper;
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper; 
 
-    BoxUsersControllerTest() {
+    UsuarioBoxControllerTest() {
     }
 
     @Test
     void findAllBoxUsers() throws Exception {
-        String URL = BASE_PATH+"/findAllBoxUsers";
+        String URL = BASE_PATH;
         //when
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(URL))
                 .andExpect(status().isOk())
                 .andReturn();
         //then
-        List<ResponseBoxUserDto> returnedBoxUsers =
+        List<ResponseUsuarioBoxDto> returnedBoxUsers =
                 mapper.readValue(
                         mvcResult.getResponse().getContentAsString(),
-                        new TypeReference<List<ResponseBoxUserDto>>() {});
+                        new TypeReference<List<ResponseUsuarioBoxDto>>() {});
 
         assertNotNull(returnedBoxUsers);
         assertTrue(returnedBoxUsers.size()>0);
@@ -56,15 +61,17 @@ class BoxUsersControllerTest {
 
     @Test
     void findBoxUserById() throws Exception {
-        String URL = BASE_PATH+"/findBoxUserById";
+    	//given
+        Long userId = 1L; //ID
+        String URL = BASE_PATH + "/" + userId; // Usa el ID en la ruta
         //when
         MvcResult mvcResult = mockMvc.perform(
-                MockMvcRequestBuilders.get(URL).param("boxUserId", "1"))
-                .andExpect(status().isOk())
+                MockMvcRequestBuilders.get(URL))
+                .andExpect(status().isOk()) // Espera un 200 OK
                 .andReturn();
         //then
         String json = mvcResult.getResponse().getContentAsString();
-        ResponseBoxUserDto responseBoxUserDto = new ObjectMapper().readValue(json, ResponseBoxUserDto.class);
+        ResponseUsuarioBoxDto responseBoxUserDto = objectMapper.readValue(json, ResponseUsuarioBoxDto.class);
         assertNotNull(responseBoxUserDto);
         assertEquals(1, responseBoxUserDto.getId());
     }
@@ -72,10 +79,11 @@ class BoxUsersControllerTest {
     @Test
     void saveBoxUser() throws Exception {
         //given
-        String URL = BASE_PATH+"/saveBoxUser";
-        RequestBoxUserDto newBoxUserDto = new RequestBoxUserDto();
-        newBoxUserDto.setName("Raul");
-        newBoxUserDto.setLastName("Gonzalez Gonzalez");
+        String URL = BASE_PATH;
+        RequestUsuarioBoxDto newBoxUserDto = new RequestUsuarioBoxDto();
+        newBoxUserDto.setNombre("Raul");
+        newBoxUserDto.setApellido1("Gonzalez");
+        newBoxUserDto.setApellido2("Fernandez");
 
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
@@ -88,19 +96,20 @@ class BoxUsersControllerTest {
                         .andReturn();
         //then
         String json = mvcResult.getResponse().getContentAsString();
-        ResponseBoxUserDto saveUserDto = new ObjectMapper().readValue(json, ResponseBoxUserDto.class);
+        ResponseUsuarioBoxDto saveUserDto = objectMapper.readValue(json, ResponseUsuarioBoxDto.class);
         assertNotNull(saveUserDto);
         assertNotNull(saveUserDto.getId());
     }
 
     @Test
     void deleteBoxUserById() throws Exception {
-        //given
-        String URL = BASE_PATH+"/deleteBoxUser";
+    	//given
+        Long userId = 1L; //ID
+        String URL = BASE_PATH + "/" + userId; // Usa el ID en la ruta
         //when
-       mockMvc.perform(
-                        MockMvcRequestBuilders.delete(URL).param("boxUserId", "1"))
-                .andExpect(status().isNoContent());
+        mockMvc.perform(
+                        MockMvcRequestBuilders.delete(URL)) // Elimina el parámetro de consulta
+                .andExpect(status().isNoContent()); // Espera un 204 No Content
 
 
     }

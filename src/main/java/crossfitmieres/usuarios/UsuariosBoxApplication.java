@@ -1,13 +1,13 @@
-package crossfitmieres.users;
+package crossfitmieres.usuarios;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class BoxUsersApplication {
+public class UsuariosBoxApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(BoxUsersApplication.class, args);
+		SpringApplication.run(UsuariosBoxApplication.class, args);
 	}
 
 }
